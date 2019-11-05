@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Wine Seeker List</title>
+  </head>
+  <style>
+    body{
+      background-image: url(http://thumbs.xdesktopwallpapers.com/wp-content/uploads/2012/04/Red%20Wine%20With%20Green%20Leaves%20And%20White%20Background-720x405.jpg);
+      margin-left:0.5em;
+      color:indigo;
+    }
+    
+  </style>
+  <body>
+    <h1>Wine Seeker List <i class="fa fa-glass"></i></h1>
+    <ul></ul>
+
+    <script>
+      const electron = require('electron');
+      const {ipcRenderer} = electron;
+      const ul = document.querySelector('ul');
+
+          
+      //catch add item
+      ipcRenderer.on('item:add', function(e,items){//items is an ARRAY of objects
+        items.forEach(function(item){//item is one element/object of the Array
+          const li = document.createElement('li');
+          const itemID = document.createTextNode("ID: ");
+          const itemID1 = document.createTextNode(item.Wine_Id);
+          const itemText = document.createTextNode(" Name: ");
+          const itemText1 = document.createTextNode(item.Name);//ref property of obj
+          const itemText2 = document.createTextNode(" - Category: ");
+          const itemText3 = document.createTextNode(item.Category);
+          const itemText4 = document.createTextNode(" - Type ");
+          const itemText5 = document.createTextNode(item.Type);
+          const itemText6 = document.createTextNode(" - Year: ");
+          const itemText7 = document.createTextNode(item.Year);
+          const itemText8 = document.createTextNode(" - Winery: ");
+          const itemText9 = document.createTextNode(item.Winery);
+          const itemText10 = document.createTextNode(" - Year Purchased: ");
+          const itemText11 = document.createTextNode(item.Year_Purchased);
+          const itemText12 = document.createTextNode(" - Rating: ");
+          const itemText13 = document.createTextNode(item.Rating);
+          li.appendChild(itemID);
+          li.appendChild(itemID1);
+          li.appendChild(itemText);
+          li.appendChild(itemText1);
+          li.appendChild(itemText2);
+          li.appendChild(itemText3);
+          li.appendChild(itemText4);
+          li.appendChild(itemText5);
+          li.appendChild(itemText6);
+          li.appendChild(itemText7);
+          li.appendChild(itemText8);
+          li.appendChild(itemText9);
+          li.appendChild(itemText10);
+          li.appendChild(itemText11);
+          li.appendChild(itemText12);
+          li.appendChild(itemText13);
+          ul.appendChild(li);
+        })
+      });
+
+      //  catch add item
+     
+
+      //item clear
+      ipcRenderer.on('item:clear', function(){
+        ul.innerHTML = '';
+      });
+
+      //remove item
+      ul.addEventListener('dblclick',removeItem);
+
+      function removeItem(e){
+        e.target.remove();
+      }
+
+    </script>
+
+  </body>
+</html>

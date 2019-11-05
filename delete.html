@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+        <body>
+                <form>
+                  <div class = "outer">
+                    <label>Id to delete:</label>
+                    <input type="text" id="id" pattern="\d+" title="Contain numbers only" autofocus>
+                  </div>
+                  <button type="submit">Delete</button>
+                </form>
+        </body>
+        <script>
+            const electron = require('electron')
+            const {ipcRenderer} = electron
+            const form = document.querySelector('form');
+            form.addEventListener('submit', submitForm);
+            function submitForm(e) {
+                e.preventDefault();
+                const id = document.querySelector('#id').value;
+                ipcRenderer.send('item:delete',id);//send to main.js
+
+
+            }
+        </script>
+</html>
