@@ -136,7 +136,7 @@ function createDeleteWindow() {
       try{
       if (id <= result[0]){
         
-        knex('wine')
+      knex('wine')
       .where('Wine_Id',id)
       .del().then(() => console.log("data deleted"))
       deleteWindow.close();
