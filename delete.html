@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+        <body>
+              
+                <form>
+                  
+                  <div class = "outer">
+                    <label>Id to delete:</label>
+                    <input type="text" id="id" pattern="\d+" title="Contain numbers only" autofocus>
+                  </div>
+                  
+                  <button type="submit">Delete</button>
+                </form>
+                <ul>abc</ul>
+        </body>
+        <script>
+
+            const electron = require('electron')
+            const {ipcRenderer} = electron
+            const form = document.querySelector('form');
+            const ul = document.querySelector('ul');
+            ipcRenderer.on('message',function(e,message){
+              console.log(message);
+            })
+
+            // const li = document.createElement('li');
+            // const itemID = document.createTextNode("ID: ");
+            // li.appendChild(itemID);
+            // ul.appendChild(li);
+                
+           //catch add item
+          //  ipcRenderer.on('item:maxid', function(e,items){//items is an ARRAY of objects
+          //    items.forEach(function(item){//item is one element/object of the Array
+          //      const li = document.createElement('li');
+          //       const itemID1 = document.createTextNode(item.Wine_Id);
+          //      li.appendChild(itemID1);
+          //      ul.appendChild(li);
+          //    })
+          //  });
+          
+      // });
+            form.addEventListener('submit', submitForm);
+
+            function submitForm(e) {
+                e.preventDefault();
+                const id = document.querySelector('#id').value;
+                ipcRenderer.send('item:delete',id);//send to main.js
+
+               
+
+            }
+        </script>
+</html>

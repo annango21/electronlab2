@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Add Vintage</title>
+    
+  </head>
+  <style>
+    input:invalid {
+      border: 2px solid red;
+    }
+
+    input:valid {
+      border: 1px solid black;
+    }
+    form{
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+    .outer {
+      margin: 20px auto;
+      display: flex;
+      align-items: center;
+    }
+    label{
+      width: 30%;
+      float: left;
+      text-align: right;
+      padding-right: 10px;
+      flex-direction: column;
+    }
+    button{
+      align-items: center;
+      margin-left: 40%;
+    }
+ 
+    </style>
+
+  <body>
+    <form>
+      <div class = "outer">
+        <label>Name:</label>
+        <input type="text" id="item" title="May contain numbers and special character" autofocus required >
+      </div>
+      <div class = "outer">
+          <label>Category:</label>
+          <select id="category" onchange="enable()" required>
+              <!-- <option selected disabled hidden>Choose a category</option> -->
+              <option value="Red">Red</option>
+              <option value="White">White</option>
+              <option value="Dessert">Dessert</option>
+          </select>
+
+      </div>
+      <div class = "outer">
+        <label>Type :</label><i class="wine-bottle"></i>
+      </div>
+      <div class= "outer" >
+          <label>Categories: Reds</label>
+          <select id="reds" >
+              <!-- <option selected disabled hidden>Choose a name</option> -->
+              <option value="Cabernet">Cabernet</option>
+              <option value="Cabernet Sauvignon">Cabernet Sauvignon</option>
+              <option value="Chardonnay">Chardonnay</option>
+              <option value="Malbec">Malbec</option>
+              <option value="Merlot">Merlot</option>
+              <option value="Sirah / Shiraz">Sirah / Shiraz</option>
+              <option value="Pinot Noir">Pinot Noir</option>
+              <option value="Port">Port</option>
+              <option value="Other Red Varieties">Other Red Varieties</option>
+              <option value="Red Blends">Red Blends</option>
+              </select>
+      </div>
+      <div class= "outer">
+          <label>Categories: Whites</label>
+          <select id = "whites">
+              <!-- <option selected disabled hidden>Choose a name</option> -->
+              <option value="Riesling">Riesling</option>
+              <option value="Sauvignon Blanc">Sauvignon Blanc</option>
+              <option value="Verdelho">Verdelho</option>
+              <option value="Semillon">Semillon</option>
+              <option value="Chardonnay">Chardonnay</option>
+              <option value="Pinot Gris / Pinot Grigio">Pinot Gris / Pinot Grigio</option>
+              <option value="Other White Varieties">Other White Varieties</option>
+              <option value="White Blends">White Blends</option>
+            </select>
+
+      </div>  
+      <div class= "outer" >
+          <label>Categories: Dessert</label>
+          <select id="dessert">
+              <!-- <option selected disabled hidden>Choose a name</option> -->
+              <option value="Eiswein (Ice Wine)">Eiswein (Ice Wine)</option>
+              <option value="Sauternes">Sauternes</option>
+              <option value="Other Dessert Varieties">Other Dessert Varieties</option>
+              <option value="Dessert Blends">Dessert Blends</option>
+            </select> 
+      </div>
+              
+              
+          
+      
+      <div class = "outer">
+        
+        <label>Year :</label>
+        <input type="text" id="year" pattern="\d+" maxlength="4" title="Contain numbers only" autofocus required>
+      </div>
+      <div class = "outer">
+        <label>Winery :</label>
+        <input type="text" id="winery" title="May contain numbers and special character" autofocus required>
+      </div>
+      <div class = "outer">
+        <label>Year Purchased :</label>
+        <input type="text" id="yearpurchased" pattern="\d+" maxlength="4" title="Contain numbers only" autofocus required>
+      </div>
+      <div class = "outer">
+        <label>Rating :</label>
+        <span id = "rating" >
+          <input type="radio" name="rate" value="1"  checked><i>1</i>
+          <input type="radio" name="rate" value="2"><i>2</i>
+          <input type="radio" name="rate" value="3"><i>3</i>
+          <input type="radio" name="rate" value="4"><i>4</i>
+          <input type="radio" name="rate" value="5"><i>5</i>
+          <input type="radio" name="rate" value="6"><i>6</i>
+          <input type="radio" name="rate" value="7"><i>7</i>
+          <input type="radio" name="rate" value="8"><i>8</i>
+          <input type="radio" name="rate" value="9"><i>9</i>
+          <input type="radio" name="rate" value="10"><i>10</i>
+        </span>
+      </div>
+      <button type="submit">add item</button>
+    </form>
+
+  <script>
+    const electron = require('electron')
+    const {ipcRenderer} = electron
+    const form = document.querySelector('form');
+    form.addEventListener('submit', submitForm);
+
+    function submitForm(e) {
+      e.preventDefault();
+      const item = document.querySelector('#item').value;
+      const category = document.querySelector('#category').value;
+      typeValue();
+      const year = document.querySelector('#year').value;
+      const winery = document.querySelector('#winery').value;
+      const yearpurchased = document.querySelector('#yearpurchased').value;
+      const rating = document.querySelector('input[name="rate"]:checked').value;
+      ipcRenderer.send('item:insert', item, category,type,year,winery,yearpurchased,rating);//send to main.js
+
+
+    }
+    function typeValue(){
+      let x = document.getElementById("category").value;
+      if(x =="Red"){
+        return type = document.querySelector('#reds').value;
+      }else if (x=="White"){
+        return type = document.querySelector('#whites').value;
+
+      }else{
+        return type = document.querySelector('#dessert').value;
+      }
+
+    }
+
+    function enable() {
+      let x = document.getElementById("category").value;
+      if(x =="Red"){
+        document.getElementById("reds").disabled=false;
+        document.getElementById("whites").disabled=true;
+        document.getElementById("dessert").disabled=true;
+      }else if(x == "White"){
+        document.getElementById("whites").disabled=false;
+        document.getElementById("reds").disabled=true;
+        document.getElementById("dessert").disabled=true;
+
+      }else{
+        document.getElementById("dessert").disabled=false;
+        document.getElementById("whites").disabled=true;
+        document.getElementById("reds").disabled=true;
+      }
+      
+    }
+
+  </script>
+  </body>
+</html>

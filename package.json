@@ -1,0 +1,21 @@
+{
+  "name": "electron-demo",
+  "version": "1.0.0",
+  "description": "Demo No State",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "author": "D Russell",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^6.0.9",
+    "knex": "^0.19.4",
+    "save": "^2.4.0",
+    "sqlite3": "^4.1.0"
+  },
+  "devDependencies": {
+    "electron-builder": "^21.2.0"
+  }
+}
