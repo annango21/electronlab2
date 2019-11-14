@@ -29,8 +29,8 @@ function createWindow() {
     }
   })
 
+
   mainWindow.loadFile('mainwindow.html')
-  
   mainWindow.on('closed', function() {
     app.quit();
   });
@@ -107,46 +107,69 @@ function createUpdateWindow() {
 
 function createDeleteWindow() {
   deleteWindow = new BrowserWindow( {
-    width: 300,
-    height: 300,
+    width: 600,
+    height: 600,
     icon: __dirname + '/Icon/icon.ico',
     webPreferences: {
       nodeIntegration: true
     }
   })
-  deleteWindow.webContents.send('message', 'message from main.js');
-  // getWindow('deleteWindow').webContents.send('info' , {msg:'hello from main process'});
-  deleteWindow.loadFile('delete.html')
-//   knex.select('Wine_Id')
-//   .table('wine')
-//   .orderBy('Wine_Id', 'desc')
-//   .limit(1)
-//   // .pluck('Wine_Id')
-// //   .then (id => {
-// //     console.log(id);
-// //     deleteWindow.webContents.send('item:maxid',id);
-// // })
-//   .then((rows) => {
-//     console.log(rows);
-//     deleteWindow.webContents.send('item:maxid',rows);
-//     }).catch((err) => { console.log( err); throw err })
-  
-//   deleteWindow.on('closed', function() {
-//     deleteWindow = null;
-//   });
-
-// delete wine
-
-  ipcMain.on('item:delete', function(e, id) {
-    console.log(id);//test data got here to main
-    knex('wine')
-    .where('Wine_Id',id)
-    .del().then(() => console.log("data deleted"))
-    .catch((err) => { console.log(err); throw err })
-    deleteWindow.close();
-    clearWindow();
-    readDB();
+  deleteWindow.webContents.openDevTools()
+  deleteWindow.webContents.on('did-finish-load', () => {
+    deleteWindow.webContents.send('ping', 'whoooooooh!')
   });
+  deleteWindow.loadFile('delete.html')
+  knex.select('Wine_Id')
+  .table('wine')
+  .orderBy('Wine_Id', 'desc')
+  .limit(1)
+  // .pluck('Wine_Id')
+//   .then (id => {
+//     console.log(id);
+//     deleteWindow.webContents.send('item:maxid',id);
+// })
+  .then((rows) => {
+    // console.log(rows);
+    let result = rows.map(a => a.Wine_Id);
+    console.log(result[0]);
+    ipcMain.on('item:delete', function(e, id) {
+      try{
+      if (id <= result[0]){
+        
+        knex('wine')
+      .where('Wine_Id',id)
+      .del().then(() => console.log("data deleted"))
+      deleteWindow.close();
+      clearWindow();
+      readDB();
+      }else{
+        console.log('fail');
+      }
+    }
+    catch(err){ console.log( err)
+    };
+
+    // delete wine
+   
+
+   
+  })
+});
+ 
+  deleteWindow.on('closed', function() {
+    deleteWindow = null;
+  });
+
+// // delete wine
+//   ipcMain.on('item:delete', function(e, id) {
+//     knex('wine')
+//     .where('Wine_Id',id)
+//     .del().then(() => console.log("data deleted"))
+//     .catch((err) => { console.log(err); throw err })
+//     // deleteWindow.close();
+//     clearWindow();
+//     readDB();
+//   });
   
 }
 
